@@ -1,0 +1,33 @@
+{
+  "name": "ts-bundler",
+  "version": "1.0.0",
+  "bin": {
+    "foo": "./dist/index.js"
+  },
+  "description": "",
+  "license": "MIT",
+  "author": "bpetermann",
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -p . -w",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "vitest",
+    "prepare": "husky"
+  },
+  "keywords": [],
+  "dependencies": {
+    "@types/node": "^25.0.9",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.53.1",
+    "vite-tsconfig-paths": "^6.0.4"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.2",
+    "husky": "^9.1.7",
+    "jiti": "^2.6.1",
+    "vitest": "^4.0.17"
+  }
+}
