@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 
 export default defineConfig([
   {
-    ignores: ['dist/**'],
+    ignores: ['dist/**', 'dist'],
   },
   {
     files: ['**/*.{js,mjs,cjs,ts,mts,cts}'],
@@ -20,7 +20,7 @@ export default defineConfig([
       globals: globals.browser,
       parserOptions: {
         tsconfigRootDir: __dirname,
-        project: './tsconfig.json',
+        project: './tsconfig.eslint.json',
       },
     },
     rules: {

@@ -17,6 +17,6 @@
     "outDir": "dist",
     "typeRoots": ["node_modules/@types", "index.d.ts"]
   },
-  "exclude": ["dist", "node_modules"],
+  "exclude": ["dist", "node_modules", "tests"],
   "lib": ["es2015"]
 }
