@@ -12,3 +12,13 @@ describe('Bundler', () => {
     expect(readdirSync(root)).toHaveLength(2);
   });
 });
+
+describe('Bundler', () => {
+  it('creates an dist output file', () => {
+    const { root, index } = createTempFile('');
+
+    new Bundler(root, index).bundle();
+
+    expect(readdirSync(root)).toContain(`dist-${index}`);
+  });
+});
