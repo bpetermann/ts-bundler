@@ -5,9 +5,9 @@ import { createTempFile } from './helper.js';
 
 describe('Bundler', () => {
   it('creates an output file', () => {
-    const { root, index } = createTempFile('hello, world!');
+    const { root, file } = createTempFile('hello, world!');
 
-    new Bundler(root, index).bundle();
+    new Bundler(root, file).bundle();
 
     expect(readdirSync(root)).toHaveLength(2);
   });
@@ -15,10 +15,10 @@ describe('Bundler', () => {
 
 describe('Bundler', () => {
   it('creates an dist output file', () => {
-    const { root, index } = createTempFile('');
+    const { root, file } = createTempFile('');
 
-    new Bundler(root, index).bundle();
+    new Bundler(root, file).bundle();
 
-    expect(readdirSync(root)).toContain(`dist-${index}`);
+    expect(readdirSync(root)).toContain(`dist-${file}`);
   });
 });

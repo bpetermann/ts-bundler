@@ -11,11 +11,11 @@ export function createTempRepo() {
   return { root };
 }
 
-export function createTempFile(text: string, index = 'index.js') {
+export function createTempFile(text: string, file = 'index.js') {
   const { root } = createTempRepo();
-  writeFileSync(join(root, index), text);
+  writeFileSync(join(root, file), text);
 
-  return { root, index };
+  return { root, file };
 }
 
 export function runCleanup() {
