@@ -4,6 +4,11 @@ import { join } from 'path';
 
 const cleanupFns: Array<() => void> = [];
 
+export function runCleanup() {
+  cleanupFns.forEach((fn) => fn());
+  cleanupFns.length = 0;
+}
+
 export function createTempRepo() {
   const root = mkdtempSync(join(tmpdir(), 'bundle-test-'));
   cleanupFns.push(() => rmSync(root, { recursive: true, force: true }));
@@ -18,7 +23,11 @@ export function createTempFile(text: string, file = 'index.js') {
   return { root, file };
 }
 
-export function runCleanup() {
-  cleanupFns.forEach((fn) => fn());
-  cleanupFns.length = 0;
+export function createTempFiles(files: { file: string; text: string }[]): {
+  root: string;
+} {
+  const { root } = createTempRepo();
+  files.forEach(({ file, text }) => writeFileSync(join(root, file), text));
+
+  return { root };
 }
