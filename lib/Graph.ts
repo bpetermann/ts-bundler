@@ -4,6 +4,7 @@ import Parser from './Parser.js';
 
 export type BundleGraph = {
   [filepath: string]: {
+    id: string;
     code: string;
     dependencies: string[];
   };
@@ -40,15 +41,22 @@ export default class Graph {
   }
 
   toJSON(): BundleGraph {
-    const graph: Record<string, { code: string; dependencies: string[] }> = {};
+    const graph: BundleGraph = {};
 
     for (const module of this.dependencyGraph) {
       graph[module.filepath] = {
         code: module.code ?? '',
-        dependencies: module.dependencies,
+        id: this.normalizeId(module.filepath),
+        dependencies: module.dependencies.map((dep) =>
+          this.normalizeId(path.join(this.rootDir, dep)),
+        ),
       };
     }
 
     return graph;
+  }
+
+  private normalizeId(file: string): string {
+    return './' + path.relative(this.rootDir, file).replace(/\\/g, '/');
   }
 }
