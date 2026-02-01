@@ -5,7 +5,7 @@ import { createTempFile } from './helper.js';
 
 describe('Bundler', () => {
   it('creates an output file', () => {
-    const { root, file } = createTempFile('hello, world!');
+    const { root, file } = createTempFile('console.log("hello, world!");');
 
     new Bundler(root, file).bundle();
 
