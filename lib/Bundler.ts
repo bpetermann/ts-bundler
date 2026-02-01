@@ -1,5 +1,6 @@
-import { readFileSync, writeFileSync } from 'fs';
+import { writeFileSync } from 'fs';
 import path from 'path';
+import Graph from './Graph.js';
 
 export default class Bundler {
   entryFile: string;
@@ -12,22 +13,18 @@ export default class Bundler {
 
   bundle() {
     try {
-      const data = this.getFileData();
+      const output = this.generateBundle();
 
-      writeFileSync(path.join(this.rootDir, `dist-${this.entryFile}`), data);
+      writeFileSync(path.join(this.rootDir, `dist-${this.entryFile}`), output);
     } catch (err) {
       console.error(`ts-bundler: ${err.message}`);
     }
   }
 
-  getFileData(): string {
-    try {
-      return readFileSync(path.join(this.rootDir, this.entryFile), {
-        encoding: 'utf8',
-        flag: 'r',
-      });
-    } catch (err) {
-      throw Error(err.message);
-    }
+  private generateBundle(): string {
+    const graph = new Graph(this.rootDir, this.entryFile);
+    const graphData = graph.toJSON();
+
+    return `(function(){const graph =${JSON.stringify(graphData, null, 2)}})();`;
   }
 }
