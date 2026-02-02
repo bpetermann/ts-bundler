@@ -1,4 +1,4 @@
-import { mkdtempSync, rmSync, writeFileSync } from 'fs';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 
@@ -16,6 +16,19 @@ export function createTempRepo() {
   return { root };
 }
 
+export function createTempDirs(
+  dirs: { dir: string; file: string; text: string }[],
+) {
+  const { root } = createTempRepo();
+
+  dirs.forEach(({ dir, file, text }) => {
+    const fullDir = join(root, dir);
+    mkdirSync(fullDir, { recursive: true });
+    writeFileSync(join(fullDir, file), text);
+  });
+
+  return { root };
+}
 export function createTempFile(text: string, file = 'index.js') {
   const { root } = createTempRepo();
   writeFileSync(join(root, file), text);
