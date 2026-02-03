@@ -1,7 +1,11 @@
 const IMPORT_STATEMENT = 'import' as const;
 
 export default class Parser {
-  constructor() {}
+  private indexExtension: string;
+
+  constructor(indexExtension = '.js') {
+    this.indexExtension = indexExtension;
+  }
 
   parse(data: string): string[] {
     return data
@@ -20,6 +24,12 @@ export default class Parser {
     const fromPath = line.split('from ')?.[1];
     const file = fromPath?.match(/(['"`])([^]*?)\1/)?.[2];
     if (!file) return;
-    return file;
+    return this.resolveDirectoryImport(file);
+  }
+
+  private resolveDirectoryImport(file: string): string {
+    return file.split('/').pop()?.includes('.')
+      ? file
+      : `${file}/index${this.indexExtension}`;
   }
 }
