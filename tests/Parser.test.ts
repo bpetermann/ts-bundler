@@ -31,4 +31,13 @@ describe('Parser', () => {
 
     expect(dependencies).toEqual(['./foo.js', './bar.js']);
   });
+
+  it('resolves directory imports to index.js', () => {
+    const data = `import baz from "./foo"`;
+    const parser = new Parser();
+
+    const dependencies = parser.parse(data);
+
+    expect(dependencies).toEqual(['./foo/index.js']);
+  });
 });

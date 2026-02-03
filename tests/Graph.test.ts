@@ -65,7 +65,7 @@ describe('Graph', () => {
     expect(files.filter((f) => f.endsWith('bar.js'))).toHaveLength(1);
   });
 
-  it.only('recurse nested directories dependencies', () => {
+  it('recurse nested directories dependencies', () => {
     const { root } = createTempDirs([
       { dir: '/', file: 'index.js', text: "import baz from './foo/bar.js'" },
       { dir: 'foo', file: 'bar.js', text: 'export function foo(){}' },
@@ -78,5 +78,20 @@ describe('Graph', () => {
     const files = graph.dependencyGraph.map((m) => m.filepath);
     expect(files.some((f) => f.endsWith('index.js'))).toBe(true);
     expect(files.some((f) => f.endsWith('foo/bar.js'))).toBe(true);
+  });
+
+  it('resolves directory imports', () => {
+    const { root } = createTempDirs([
+      { dir: '/', file: 'index.js', text: "import baz from './foo'" },
+      { dir: 'foo', file: 'index.js', text: 'export function foo(){}' },
+    ]);
+
+    const graph = new Graph(root, 'index.js');
+
+    expect(graph.dependencyGraph).toHaveLength(2);
+
+    const files = graph.dependencyGraph.map((m) => m.filepath);
+    expect(files.some((f) => f.endsWith('index.js'))).toBe(true);
+    expect(files.some((f) => f.endsWith('foo/index.js'))).toBe(true);
   });
 });
