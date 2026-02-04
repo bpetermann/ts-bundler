@@ -2,20 +2,21 @@ import { writeFileSync } from 'fs';
 import path from 'path';
 import RuntimeModuleGenerator from './Generator.js';
 import Graph from './Graph.js';
-
-export const REQUIRE = '__require__' as const;
+import Runtime from './Runtime.js';
 
 export default class Bundler {
   entryFile: string;
   rootDir: string;
   generator: RuntimeModuleGenerator;
   graph: Graph;
+  runtime: Runtime;
 
   constructor(rootDir?: string, entryFile?: string) {
     this.rootDir = rootDir ?? process.cwd();
     this.entryFile = entryFile ?? process.argv[2];
     this.generator = new RuntimeModuleGenerator();
     this.graph = new Graph(this.rootDir, this.entryFile);
+    this.runtime = new Runtime(this.entryFile);
   }
 
   bundle() {
@@ -41,32 +42,8 @@ export default class Bundler {
     return `
     (function () {
     const graph = {${graphSource}};
-    ${this.createRuntimeLoader()}
+    ${this.runtime.createRuntimeLoader()}
     })();
     `;
-  }
-
-  private createRuntimeLoader(): string {
-    return `${this.createRequireFunction()}${this.emitEntryExecution()}`;
-  }
-
-  private createRequireFunction(): string {
-    return `
-  const cache = {};
-
-  function ${REQUIRE}(id) {
-    if (cache[id]) return cache[id].exports;
-
-    const module = { exports: {} };
-    cache[id] = module;
-
-    graph[id](${REQUIRE}, module, module.exports);
-    return module.exports;
-  }
-  `;
-  }
-
-  private emitEntryExecution(): string {
-    return `const entry = './' + ${JSON.stringify(this.entryFile)}; ${REQUIRE}(entry);`;
   }
 }
