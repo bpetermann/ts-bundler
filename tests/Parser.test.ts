@@ -40,4 +40,94 @@ describe('Parser', () => {
 
     expect(dependencies).toEqual(['./foo/index.js']);
   });
+
+  it('extracts a default import', () => {
+    const parser = new Parser();
+
+    const code = `
+      import foo from './foo.js'
+      console.log(foo)
+    `;
+
+    const deps = parser.parse(code);
+
+    expect(deps).toEqual(['./foo.js']);
+  });
+
+  it('extracts multiple imports', () => {
+    const parser = new Parser();
+
+    const code = `
+      import foo from './foo.js'
+      import bar from "./bar.js"
+    `;
+
+    const deps = parser.parse(code);
+
+    expect(deps).toEqual(['./foo.js', './bar.js']);
+  });
+
+  it('resolves directory imports to index.js', () => {
+    const parser = new Parser();
+
+    const code = `
+      import baz from './foo'
+    `;
+
+    const deps = parser.parse(code);
+
+    expect(deps).toEqual(['./foo/index.js']);
+  });
+
+  it('ignores non-import lines', () => {
+    const parser = new Parser();
+
+    const code = `
+      const x = 1;
+      function test() {}
+      console.log(x);
+    `;
+
+    const deps = parser.parse(code);
+
+    expect(deps).toEqual([]);
+  });
+
+  it('handles mixed imports and code', () => {
+    const parser = new Parser();
+
+    const code = `
+      import foo from './foo'
+      const x = foo();
+      import bar from './bar.js'
+    `;
+
+    const deps = parser.parse(code);
+
+    expect(deps).toEqual(['./foo/index.js', './bar.js']);
+  });
+
+  it('extracts side-effect imports', () => {
+    const parser = new Parser();
+
+    const code = `
+    import './setup.js'
+  `;
+
+    const deps = parser.parse(code);
+
+    expect(deps).toEqual(['./setup.js']);
+  });
+
+  it('resolves nested directory imports', () => {
+    const parser = new Parser();
+
+    const code = `
+    import util from './foo/bar'
+  `;
+
+    const deps = parser.parse(code);
+
+    expect(deps).toEqual(['./foo/bar/index.js']);
+  });
 });
