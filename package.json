@@ -2,7 +2,7 @@
   "name": "ts-bundler",
   "version": "1.0.0",
   "bin": {
-    "foo": "./dist/index.js"
+    "bundle": "./dist/index.js"
   },
   "description": "",
   "license": "MIT",
