@@ -11,23 +11,24 @@ export default class Parser {
     return data
       .split('\n')
       .map((line) => line.trim())
-      .map((line) => this.parseLine(line))
+      .map((line) => this.extractImport(line))
       .filter((x): x is string => Boolean(x));
   }
 
-  parseLine(line: string): string | undefined {
+  private extractImport(line: string): string | undefined {
     if (!line.startsWith(IMPORT_STATEMENT)) return;
-    return this.resolveImport(line);
+    return this.extractImportPath(line);
   }
 
-  resolveImport(line: string): string | undefined {
-    const fromPath = line.split('from ')?.[1];
-    const file = fromPath?.match(/(['"`])([^]*?)\1/)?.[2];
-    if (!file) return;
-    return this.resolveDirectoryImport(file);
+  private extractImportPath(line: string): string | undefined {
+    const direct = line.match(/import\s+(['"`])([^]*?)\1/);
+    if (direct) return this.normalizeImportPath(direct[2]);
+
+    const from = line.match(/from\s+(['"`])([^]*?)\1/);
+    if (from) return this.normalizeImportPath(from[2]);
   }
 
-  private resolveDirectoryImport(file: string): string {
+  private normalizeImportPath(file: string): string {
     return file.split('/').pop()?.includes('.')
       ? file
       : `${file}/index${this.indexExtension}`;
