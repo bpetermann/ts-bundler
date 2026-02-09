@@ -4,7 +4,7 @@ A tiny **JavaScript/TypeScript** bundler implemented as a learning project to ex
 
 This repository is a minimal bundler written in TypeScript. It’s intended as an educational project to understand **module graph construction, parsing, code transformation, and runtime execution**.
 
-## Features
+## 🚀 Overview
 
 - Parses import statements and builds a dependency graph.
 - Supports nested directories and directory imports (./foo → ./foo/index.js).
@@ -13,7 +13,7 @@ This repository is a minimal bundler written in TypeScript. It’s intended as a
 - Generates a single bundled IIFE runtime with a custom **require** function.
 - Pure TypeScript implementation with minimal dependencies.
 
-## Installation
+## ⚙️ Installation & Usage
 
 **Build**
 
@@ -51,7 +51,7 @@ Project structure:
       └─ bar.js
 ```
 
-index.js`:
+`index.js`:
 
 ```js
 import sum from './foo/bar.js';
@@ -82,7 +82,15 @@ The output bundle contains all modules and executes:
 
 ```
 
-### 🛠️ Contributing
+## 🧪 Tests
+
+The following command executes all Vitest test suites
+
+```bash
+npm run test
+```
+
+## 🛠️ Contributing
 
 Contributions, questions, or suggestions are welcome
 
