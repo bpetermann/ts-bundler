@@ -24,6 +24,7 @@ export default class Runtime {
   }
 
   private emitEntryExecution(): string {
-    return `const entry = './' + ${JSON.stringify(this.entryFile)}; ${REQUIRE}(entry);`;
+    const normalized = this.entryFile.replace(/^\.\//, '');
+    return `const entry = './' + ${JSON.stringify(normalized)}; ${REQUIRE}(entry);`;
   }
 }
