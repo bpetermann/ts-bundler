@@ -24,7 +24,7 @@ export default class Bundler {
       const output = this.generateBundle();
       writeFileSync(path.join(this.rootDir, `dist-${this.entryFile}`), output);
     } catch (err) {
-      console.error(`ts-bundler: ${err.message}`);
+      console.error(`ts-bundler: ${err instanceof Error ? err.message : err}`);
     }
   }
 

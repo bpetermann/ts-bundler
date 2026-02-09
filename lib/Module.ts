@@ -27,7 +27,7 @@ export default class Module {
         flag: 'r',
       });
     } catch (err) {
-      throw Error(err.message);
+      throw Error(err instanceof Error ? err.message : String(err));
     }
   }
 }
