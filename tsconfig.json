@@ -4,19 +4,15 @@
     "module": "Node16",
     "moduleResolution": "node16",
     "baseUrl": ".",
-    "noImplicitAny": true,
-    "noImplicitThis": true,
-    "strictFunctionTypes": true,
+    "strict": true,
     "esModuleInterop": true,
     "noImplicitOverride": true,
-    "strictNullChecks": true,
-    "strictPropertyInitialization": true,
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
     "sourceMap": true,
     "outDir": "dist",
-    "typeRoots": ["node_modules/@types", "index.d.ts"]
+    "typeRoots": ["node_modules/@types", "index.d.ts"],
+    "lib": ["es2015"]
   },
-  "exclude": ["dist", "node_modules", "tests"],
-  "lib": ["es2015"]
+  "exclude": ["dist", "node_modules", "tests"]
 }
