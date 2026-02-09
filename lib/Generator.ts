@@ -30,7 +30,9 @@ export default class RuntimeModuleGenerator {
   }
 
   private transformModuleCode(code: string): string {
-    return this.replaceImportStatements(this.replaceExportDefaults(code));
+    return this.replaceSideEffectImports(
+      this.replaceImportStatements(this.replaceExportDefaults(code)),
+    );
   }
 
   private replaceExportDefaults(data: string): string {
@@ -41,6 +43,13 @@ export default class RuntimeModuleGenerator {
     return data.replace(
       /import\s+(\w+)\s+from\s+(['"`].+?['"`])/g,
       `const $1 = require($2)`,
+    );
+  }
+
+  private replaceSideEffectImports(data: string): string {
+    return data.replace(
+      /import\s+(['"`])(.+?)\1\s*;?/g,
+      `require($1$2$1)`,
     );
   }
 }

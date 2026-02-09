@@ -63,4 +63,40 @@ describe('RuntimeGenerator', () => {
     const add = fakeRequire('./foo.js') as (a: number, b: number) => number;
     expect(add(2, 3)).toBe(5);
   });
+
+  it('transforms side-effect imports into require calls', () => {
+    let setupExecuted = false;
+
+    const graph: BundleGraph = {
+      './setup.js': {
+        id: './setup.js',
+        code: `module.exports = 'loaded';`,
+        dependencies: [],
+      },
+      './index.js': {
+        id: './index.js',
+        code: `
+          import './setup.js';
+          export default 'ok';
+        `,
+        dependencies: ['./setup.js'],
+      },
+    };
+
+    const generator = new RuntimeGenerator();
+    const runtime = generator.generateRuntimeGraph(graph);
+
+    function fakeRequire(id: string) {
+      if (id === './setup.js') {
+        setupExecuted = true;
+      }
+      const module = { exports: {} };
+      runtime[id](fakeRequire, module, module.exports);
+      return module.exports;
+    }
+
+    const result = fakeRequire('./index.js');
+    expect(setupExecuted).toBe(true);
+    expect(result).toBe('ok');
+  });
 });
