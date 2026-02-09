@@ -11,10 +11,8 @@ describe('Bundler', () => {
 
     expect(readdirSync(root)).toHaveLength(2);
   });
-});
 
-describe('Bundler', () => {
-  it('creates an dist output file', () => {
+  it('creates a dist output file', () => {
     const { root, file } = createTempFile('');
 
     new Bundler(root, file).bundle();
